@@ -1,0 +1,76 @@
+/* Ticker view page styling */
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card-image {
+    width: 75%;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+    background-color: #fafafa;
+    padding: 15px 0;
+    transition: transform 0.3s;
+}
+
+.card-image:hover {
+    transform: scale(1.02);
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.card-description {
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 15px;
+}
+
+.card-link {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.card-link:hover {
+    text-decoration: underline;
+}
+
+.csv-indicator {
+    background-color: #f0f8ff;
+    color: #0066cc;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 8px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .card-image {
+        width: 85%;
+    }
+}
+
+@media (max-width: 600px) {
+    .card-image {
+        width: 95%;
+    }
+}

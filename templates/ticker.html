@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ ticker }} Options Analysis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ticker.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chart.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ ticker }} Options Analysis</h1>
+            <div style="display: flex; align-items: center;">
+                <a href="{{ url_for('index') }}" class="button">Back to Dashboard</a>
+                <div class="ticker-dropdown">
+                    <button class="button">Other Tickers</button>
+                    <div class="ticker-dropdown-content">
+                        {% for t in tickers %}
+                        {% if t != ticker %}
+                        <a href="{{ url_for('view_ticker', ticker=t) }}">{{ t }}</a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% for chart in charts %}
+        <div class="card">
+            {% if not chart.is_csv %}
+            <a href="{{ url_for('view_image', filename=chart.filename) }}">
+                <img src="/image/{{ chart.filename }}" alt="{{ chart.title }}" class="card-image">
+            </a>
+            <div class="card-content">
+                <div class="card-title">{{ chart.title }}</div>
+                <div class="card-description">{{ chart.description }}</div>
+                <a href="{{ url_for('view_image', filename=chart.filename) }}" class="card-link">View Details</a>
+            </div>
+            {% else %}
+            <div class="card-content">
+                <div class="card-title">{{ chart.title }}</div>
+                <div class="card-description">{{ chart.description }}</div>
+                <div class="csv-indicator">CSV Data Visualization</div>
+                
+                <!-- Inline CSV Visualization -->
+                <div class="chart-container" style="height: 400px; margin-top: 20px;">
+                    <canvas id="chart-{{ loop.index }}"></canvas>
+                </div>
+                <div style="margin-top: 15px;">
+                    <a href="#" onclick="toggleTable('table-{{ loop.index }}'); return false;" class="card-link">Toggle Data Table</a>
+                </div>
+                <div id="table-{{ loop.index }}" style="display: none; margin-top: 15px; max-height: 300px; overflow-y: auto;"></div>
+                
+                <script>
+                    // Load the CSV data when the page loads
+                    (function() {
+                        fetch('/image/{{ chart.filename }}')
+                            .then(response => response.text())
+                            .then(csvData => {
+                                createVisualization(csvData, 'chart-{{ loop.index }}', 'table-{{ loop.index }}');
+                            })
+                            .catch(error => {
+                                console.error('Error loading CSV:', error);
+                            });
+                    })();
+                </script>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    
+    <script>
+        function toggleTable(tableId) {
+            const table = document.getElementById(tableId);
+            if (table.style.display === 'none') {
+                table.style.display = 'block';
+            } else {
+                table.style.display = 'none';
+            }
+        }
+        
+        function createVisualization(csvString, chartId, tableId) {
+            // Parse CSV data
+            const rows = csvString.split('\n');
+            const headers = rows[0].split(',');
+            
+            // Create table for the data
+            const tableHtml = document.createElement('table');
+            tableHtml.className = 'data-table';
+            
+            // Add header row
+            const headerRow = document.createElement('tr');
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            tableHtml.appendChild(headerRow);
+            
+            // Add data rows
+            rows.slice(1).forEach(row => {
+                if (row.trim()) {
+                    const rowData = row.split(',');
+                    const tr = document.createElement('tr');
+                    rowData.forEach(cell => {
+                        const td = document.createElement('td');
+                        // Format numbers with commas for thousands
+                        if (!isNaN(cell) && !cell.includes('/')) {
+                            const num = parseFloat(cell);
+                            if (Number.isInteger(num)) {
+                                td.textContent = num.toLocaleString();
+                            } else {
+                                td.textContent = num.toLocaleString(undefined, { 
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 4
+                                });
+                            }
+                        } else {
+                            td.textContent = cell;
+                        }
+                        tr.appendChild(td);
+                    });
+                    tableHtml.appendChild(tr);
+                }
+            });
+            
+            document.getElementById(tableId).appendChild(tableHtml);
+            
+            // Create chart
+            const ctx = document.getElementById(chartId).getContext('2d');
+            
+            // Process data for chart
+            const dates = [];
+            const callValues = [];
+            const putValues = [];
+            const ratios = [];
+            
+            rows.slice(1).forEach(row => {
+                if (row.trim() && !row.toLowerCase().includes('total')) {
+                    const rowData = row.split(',');
+                    dates.push(rowData[0]);
+                    callValues.push(parseFloat(rowData[1]));
+                    putValues.push(parseFloat(rowData[2]));
+                    ratios.push(parseFloat(rowData[4]));
+                }
+            });
+            
+            const chartData = {
+                labels: dates,
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'Call Dollar Value (millions)',
+                        data: callValues.map(value => value / 1000000),
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        yAxisID: 'y',
+                        order: 2
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Put Dollar Value (millions)',
+                        data: putValues.map(value => value / 1000000),
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        yAxisID: 'y',
+                        order: 3
+                    },
+                    {
+                        type: 'line',
+                        label: 'Put/Call Ratio',
+                        data: ratios,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderWidth: 3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        yAxisID: 'y1',
+                        order: 1
+                    }
+                ]
+            };
+            
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Dollar Value (millions)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Put/Call Ratio'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Dollar-Weighted Put/Call Ratio by Expiration',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

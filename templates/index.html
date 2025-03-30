@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Options Analysis Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Options Analysis Dashboard</h1>
+        
+        <h2>Select a Ticker</h2>
+        <div class="ticker-grid">
+            {% for ticker, charts in tickers.items() %}
+            <a href="{{ url_for('view_ticker', ticker=ticker) }}" class="ticker-card">
+                <div class="ticker-symbol">{{ ticker }}</div>
+                <div class="chart-count">{{ charts|length }} charts</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

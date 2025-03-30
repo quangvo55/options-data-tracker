@@ -1,0 +1,125 @@
+/* Chart view styling */
+.image-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.full-image {
+    width: 75%;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.description {
+    margin-top: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Dropdown styling */
+.ticker-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.ticker-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    max-height: 300px;
+    overflow-y: auto;
+    right: 0;
+    border-radius: 4px;
+}
+
+.ticker-dropdown:hover .ticker-dropdown-content {
+    display: block;
+}
+
+.ticker-dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s;
+}
+
+.ticker-dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Chart container */
+.chart-container {
+    height: 500px;
+    margin-top: 20px;
+}
+
+/* Data table styling */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.data-table th, 
+.data-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.data-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+}
+
+.data-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.data-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .full-image {
+        width: 90%;
+    }
+    
+    .chart-container {
+        height: 400px;
+    }
+    
+    .data-table th, 
+    .data-table td {
+        padding: 8px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 600px) {
+    .full-image {
+        width: 100%;
+    }
+    
+    .chart-container {
+        height: 350px;
+    }
+    
+    .data-table th, 
+    .data-table td {
+        padding: 6px;
+        font-size: 12px;
+    }
+}
