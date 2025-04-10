@@ -46,19 +46,19 @@ The tool expects options data in JSON format with the following structure:
 
 The max pain chart shows the point where option writers would cause maximum financial loss to option buyers if the stock expired at that price.
 
-![Max Pain Chart Example](outputs/GME_max_pain.png)
+![Max Pain Chart Example](example/GME_max_pain.png)
 
 ### Open Interest Distribution
 
 This visualization shows the distribution of open interest across different strike prices for both calls and puts.
 
-![Open Interest Chart Example](outputs/GME_open_interest.png)
+![Open Interest Chart Example](example/GME_open_interest.png)
 
 ### Dollar-Weighted Put/Call Analysis
 
 This analysis examines the dollar-weighted put/call ratio across different expirations, providing insights into market sentiment.
 
-![Dollar-Weighted Analysis Example](outputs/GME_dollar_weighted_pc_analysis.png)
+![Dollar-Weighted Analysis Example](example/GME_dollar_weighted_pc_analysis.png)
 
 ## Code Structure
 
