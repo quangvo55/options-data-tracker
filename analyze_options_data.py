@@ -236,7 +236,7 @@ class OptionsVisualizer:
         
         plt.tight_layout()
         plt.savefig(f'outputs/{self.symbol}_max_pain.png')
-        plt.show()
+        # plt.show()
     
     def plot_open_interest(self):
         """Plot the open interest distribution"""
@@ -256,7 +256,7 @@ class OptionsVisualizer:
         plt.tight_layout()
         
         plt.savefig(f'outputs/{self.symbol}_open_interest.png')
-        plt.show()
+        # plt.show()
     
     def plot_dollar_weighted_ratio(self, df):
         """Plot the dollar-weighted put/call ratio by expiration"""
@@ -310,7 +310,7 @@ class OptionsVisualizer:
         
         plt.tight_layout()
         plt.savefig(f'outputs/{self.symbol}_dollar_weighted_pc_analysis.png')
-        plt.show()
+        # plt.show()
 
 
 class OptionsReport:
@@ -384,9 +384,9 @@ class OptionsReport:
         self.visualizer.plot_dollar_weighted_ratio(df)
 
 
-def main():
+def main(ticker):
     """Main function to run the options analysis"""
-    options_file = 'data/LUNR_options_data.json'
+    options_file = f'data/{ticker}_options_data.json'
     
     # Create analyzer and visualizer
     analyzer = OptionAnalyzer(options_file)

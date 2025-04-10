@@ -1,8 +1,0 @@
-{
-  "fault": {
-    "faultstring": "Body buffer overflow",
-    "detail": {
-      "errorcode": "protocol.http.TooBigBody"
-    }
-  }
-}

@@ -24,7 +24,7 @@ python schwab_auth.py
 ```
 2. Run the main script:
 ```bash
-python options-data-tracker.py
+python analyze_options_data.py
 ```
 3. Generated outputs (plots and CSV reports) will be saved to the outputs/ directory
 

@@ -48,10 +48,7 @@
                 <div class="chart-container" style="height: 400px; margin-top: 20px;">
                     <canvas id="chart-{{ loop.index }}"></canvas>
                 </div>
-                <div style="margin-top: 15px;">
-                    <a href="#" onclick="toggleTable('table-{{ loop.index }}'); return false;" class="card-link">Toggle Data Table</a>
-                </div>
-                <div id="table-{{ loop.index }}" style="display: none; margin-top: 15px; max-height: 300px; overflow-y: auto;"></div>
+                <div id="table-{{ loop.index }}" style="display: block; margin-top: 15px; max-height: 600x; overflow-y: auto;"></div>
                 
                 <script>
                     // Load the CSV data when the page loads
